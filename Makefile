@@ -2,7 +2,6 @@ install: zsh
 	@printf "\e[0;32m*********\n* DONE! *\n*********\e[0m\n"
 
 zsh:
-	$(warning ...)
 	@if [ -a ~/.zshrc ]; \
 	then \
   		cp ashatrov.zsh-theme ~/.oh-my-zsh/custom/ ;\
