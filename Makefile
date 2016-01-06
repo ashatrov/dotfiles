@@ -1,4 +1,4 @@
-install: zsh
+install: osx-settings zsh
 	@printf "\e[0;32m*********\n* DONE! *\n*********\e[0m\n"
 
 zsh:
@@ -12,6 +12,11 @@ zsh:
 		printf ${WARNING_MSG} ;\
 		echo "ZSH not found\n\n" ;\
 	fi;
+
+osx-settings:
+	@./.osxdefaults
+	@printf ${OK_MSG}
+	@echo " - Change OSX settings\n\n"
 
 OK_MSG="\e[0;32m******\n* OK *\n******\e[0m\n"
 WARNING_MSG="\e[0;33m***********\n* WARNING *\n***********\e[0m\n"
