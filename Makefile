@@ -1,20 +1,26 @@
-install: osx-settings zsh
-	@printf "\e[0;32m*********\n* DONE! *\n*********\e[0m\n"
+install: 
+	@printf "\e[0;32m*********\n* > cat Makefilr *\n*********\e[0m\n"
 
-zsh:
-	@if [ -a ~/.zshrc ]; \
-	then \
-  		cp ashatrov.zsh-theme ~/.oh-my-zsh/custom/ ;\
-		sed -i .backup -e 's/^ZSH_THEME=.*/ZSH_THEME="ashatrov"/g' ~/.zshrc ;\
-		printf ${OK_MSG} ;\
-		echo " - Change ZSH theme to 'ashatrov' inside ~/.zshrc file.\n - New theme is here ~/.oh-my-zsh/custom/ashatrov.zsh-theme.\n - Backup created ~/.zshrc.backup\n\n" ;\
-	else \
-		printf ${WARNING_MSG} ;\
-		echo "ZSH not found\n\n" ;\
+setup-zsh:
+	if [[ ! -f ~/.zshrc.default ]]; then \
+		cp -H ~/.zshrc ~/.zshrc.default && rm ~/.zshrc ;\
 	fi;
+	
+	ln -sf ${PWD}/ashatrov.zsh-theme ~/.oh-my-zsh/custom/
+	ln -sf ${PWD}/.zshrc ~/.zshrc
+
+setup-vim:
+	mkdir -p ~/.vim/autoload ~/.vim/bundle
+	curl -LSso ~/.vim/autoload/pathogen.vim https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
+	
+	if [[ ! -f ~/.vimrc.default ]]; then \
+		cp -H ~/.vimrc ~/.vimrc.default && rm ~/.vimrc ;\
+	fi;
+	
+	ln -sf ${PWD}/.vimrc ~/.vimrc
 
 osx-settings:
-	@./.osxdefaults
+	./.osxdefaults
 	@printf ${OK_MSG}
 	@echo " - Change OSX settings\n\n"
 

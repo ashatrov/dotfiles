@@ -1,0 +1,7 @@
+alias ll='ls -lahG'
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias dockerviz="docker run --rm -v /var/run/docker.sock:/var/run/docker.sock nate/dockviz"
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
