@@ -8,18 +8,29 @@ setup-zsh:
 	if [[ ! -f ~/.zshrc.default ]]; then \
 		cp -H ~/.zshrc ~/.zshrc.default && rm ~/.zshrc ;\
 	fi;
-
+	
 	ln -sf ${PWD}/ashatrov.zsh-theme ~/.oh-my-zsh/custom/
 	ln -sf ${PWD}/.zshrc ~/.zshrc
+
+install-ansible:
+	sudo easy_install pip
+	pip install --upgrade setuptools --user python
+	sudo pip install ansible
+
+install-vim:
+	brew install vim --with-override-system-vim
 
 setup-vim:
 	mkdir -p ~/.vim/autoload ~/.vim/bundle
 	curl -LSso ~/.vim/autoload/pathogen.vim https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
-
+	
+	cd ~/.vim/bundle
+	git clone https://github.com/scrooloose/nerdtree.git
+	
 	if [[ ! -f ~/.vimrc.default ]]; then \
 		cp -H ~/.vimrc ~/.vimrc.default && rm ~/.vimrc ;\
 	fi;
-
+	
 	ln -sf ${PWD}/.vimrc ~/.vimrc
 
 osx-settings:
