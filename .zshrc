@@ -3,7 +3,7 @@ LANGUAGE=en_US.UTF-8
 LC_ALL=en_US.UTF-8
 LC_TYPE=en_US.UTF-8
 
-eval "$(docker-machine env re)"
+eval "$(docker-machine env default)"
 
 source `brew --prefix`/etc/profile.d/z.sh
 
