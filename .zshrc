@@ -7,10 +7,7 @@ eval "$(docker-machine env default)"
 
 source `brew --prefix`/etc/profile.d/z.sh
 
-export PATH="/usr/local/sbin:$PATH"
-
-alias ll='ls -lah'
-alias dockerviz="docker run --rm -v /var/run/docker.sock:/var/run/docker.sock nate/dockviz"
+export PATH="/usr/local/sbin§:$PATH"
 
 
 # Path to your oh-my-zsh installation.
@@ -97,3 +94,6 @@ export LANG=en_US.UTF-8
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+alias ll='ls -lah'
+alias dockerviz="docker run --rm -v /var/run/docker.sock:/var/run/docker.sock nate/dockviz"
