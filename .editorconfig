@@ -1,0 +1,11 @@
+# EditorConfig: http://EditorConfig.org
+# PHPStorm: https://plugins.jetbrains.com/plugin/7294
+
+root = true
+
+[*.php]
+insert_final_newline = true
+max_line_length = 200
+
+[Makefile]
+indent_style = tab

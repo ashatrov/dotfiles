@@ -1,6 +1,9 @@
 install:
 	@printf "\e[0;32m*********\n* > cat Makefilr *\n*********\e[0m\n"
 
+install-my:
+	ln -sf ${PWD}/utils.sh /usr/local/bin/my
+
 install-zsh:
 	sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
