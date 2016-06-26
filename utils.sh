@@ -6,7 +6,7 @@
 
 function jsonValPython () # Print formatted JSON
 {
-	python -c "import json,sys;sys.stdout.write(json.dumps(json.load(sys.stdin)$1, sort_keys=True, indent=4))";
+    python -c "import json,sys;sys.stdout.write(json.dumps(json.load(sys.stdin)$1, sort_keys=True, indent=4))";
 }
 
 function jsonVal () # Print formatted JSON
@@ -46,9 +46,20 @@ function dockerRemoveAllImages () # Remove all Docker images
 
 function dockerDeleteAllImages () # (Aliace) Remove all Docker images
 {
-    dockerRemoveAllImages
+	dockerRemoveAllImages
 }
 
+function dockerviz ()
+{
+	breakIfEmpty "$1" "'-t'\t- tree\n'-t -i'\t- tree incremental\n'-t -l'\t- only labeled\n'-s'\t- short output\n"
+
+	docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock nate/dockviz images $@
+}
+
+function myecho ()
+{
+	echo $@
+}
 ######################
 ##### END DOCKER #####
 ######################
@@ -57,7 +68,7 @@ function dockerDeleteAllImages () # (Aliace) Remove all Docker images
 ##### SERVICE FUNCS #####
 #########################
 
-function myhelp() # Show a list of functions
+function myhelp () # Show a list of functions
 {
 echo "
 JSON
@@ -65,10 +76,22 @@ JSON
     jsonVal       - Print formatted JSON
 
 DOCKER
-    dockerRemoveAllContainers - Remove all Docker containers (alias: dockerDeleteAllContainers)
-    dockerRemoveAllImages     - Remove all Docker images (alias: dockerDeleteAllImages)
+    dockerRemoveAllContainers   - Remove all Docker containers (alias: dockerDeleteAllContainers)
+    dockerRemoveAllImages       - Remove all Docker images (alias: dockerDeleteAllImages)
+    dockerviz                   - Print docker images tree
 ";
 }
+
+function breakIfEmpty () # Break if $1 is empty. Example: breakIfEmpty "${var}" "Print this error message if first param is empty"
+{
+    if [[ ! $1 ]]; then
+        if [[ $2 ]]; then
+            printf "$2"
+        fi
+		exit 1
+	fi
+}
+
 
 if [ "_$1" = "_" ]; then
     myhelp
