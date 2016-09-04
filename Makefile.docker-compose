@@ -1,0 +1,42 @@
+arg = $(filter-out $@,$(MAKECMDGOALS))
+
+ps:
+	docker-compose ps
+
+stop:
+	docker-compose stop
+	sleep 2
+	docker-compose ps
+
+start:
+	docker-compose up -d
+	sleep 2
+	docker ps
+
+rm: stop
+	docker-compose rm -v -f
+
+up: stop start
+
+
+
+
+build-infrastructure:
+	@echo "Build infrastructure"
+
+build-data:
+	@echo "Build data"
+
+build-code:
+	@echo "Build code"
+
+
+
+docker-cleanup-volumes:
+	docker volume rm $(docker volume ls -qf dangling=true)
+
+ssh:
+	docker exec -it  $(shell docker-compose ps | grep ${arg} | awk '{ print $$1 }') bash
+
+%:
+	@:
