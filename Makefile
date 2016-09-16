@@ -5,7 +5,11 @@ install-my:
 	ln -sf ${PWD}/utils.sh /usr/local/bin/my
 
 install-zsh:
-	sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+	brew install z zsh zsh-completions
+	sh -c "$$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+	
+	rm -rf ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions ; git clone git://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+	rm -rf ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ; git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 
 setup-zsh:
 	if [[ ! -f ~/.zshrc.default ]]; then \
