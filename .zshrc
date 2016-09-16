@@ -59,7 +59,8 @@ CASE_SENSITIVE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git brew brew-cask composer docker docker-compose vim-interaction zsh-autosuggestions colorize colored-man-pages zsh-syntax-highlighting)
+#plugins=(git brew brew-cask composer docker docker-compose vim-interaction zsh-autosuggestions colorize colored-man-pages zsh-syntax-highlighting)
+plugins=(git brew brew-cask composer docker docker-compose vim-interaction colorize colored-man-pages)
 
 # User configuration
 

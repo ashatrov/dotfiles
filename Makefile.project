@@ -1,0 +1,41 @@
+arg = $(filter-out $@,$(MAKECMDGOALS))
+
+info:
+	@echo "Project Makefile"
+
+# Configure
+configure:
+	@echo "Configure"
+
+configure-clean:
+	@echo "Clean configured"
+# Build data
+build-data:
+	@echo "Build data"
+
+build-data-clean:
+	@echo "Clean built data"
+
+# Build code
+build-code:
+	@echo "Build code"
+
+build-code-clean:
+	@echo "Clean built code"
+
+#
+# Bulk operations
+#
+install: configure build-data build code
+	@echo "Install project"
+
+clean: build-code-clean build-data-clean configure-clean
+	@echo "Clean project"
+
+reinstall: clean install
+	@echo "Reinstall project"
+
+
+
+%:
+	@:

@@ -1,0 +1,61 @@
+arg = $(filter-out $@,$(MAKECMDGOALS))
+
+#
+# Docker
+#
+ps:
+	docker-compose ps
+
+stop:
+	@echo "Stop Containers"
+	docker-compose stop
+	sleep 2
+	docker-compose ps
+
+start:
+	@echo "Start Containers"
+	docker-compose up -d
+	sleep 2
+	docker-compose ps
+
+rm: stop
+	@echo "Remove Containers"
+	docker-compose rm -v -f
+
+up: stop start
+
+ssh:
+	docker exec -it  $(shell docker-compose ps | grep ${arg} | awk '{ print $$1 }') bash
+
+docker-cleanup-volumes:
+	docker volume rm $(docker volume ls -qf dangling=true)
+#
+# Project
+#
+project:
+	@if [ -a Makefile.project ] ; \
+	then \
+		$(MAKE) -f Makefile.project  ${arg} ; \
+	fi;
+
+#
+# Commands
+#
+configure:
+	@echo "FAKE Configure"
+
+configure-clean:
+	@echo "Fake Clean Configure"
+
+install: configure up
+
+clean: rm configure-clean
+	@echo "FAKE Clean"
+
+reinstall: clean install
+
+
+
+%:
+	@:
+
