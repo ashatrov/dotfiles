@@ -31,8 +31,9 @@ setup-vim:
 	mkdir -p ~/.vim/autoload ~/.vim/bundle
 	curl -LSso ~/.vim/autoload/pathogen.vim https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
 	
-	cd ~/.vim/bundle
-	git clone https://github.com/scrooloose/nerdtree.git
+	rm -rf ~/.vim/bundle/nerdtree/ && git clone https://github.com/scrooloose/nerdtree.git ~/.vim/bundle/nerdtree/
+	rm -rf ~/.vim/bundle/editorconfig-vim/ && git clone https://github.com/editorconfig/editorconfig-vim.git ~/.vim/bundle/editorconfig-vim/
+	rm -rf ~/.vim/bundle/vim-yaml/ && git clone https://github.com/avakhov/vim-yaml ~/.vim/bundle/vim-yaml
 	
 	if [[ ! -f ~/.vimrc.default ]]; then \
 		cp -H ~/.vimrc ~/.vimrc.default && rm ~/.vimrc ;\
