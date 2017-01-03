@@ -96,3 +96,6 @@ export LANG=en_US.UTF-8
 
 alias ll='ls -lah'
 alias dockerviz="docker run --rm -v /var/run/docker.sock:/var/run/docker.sock nate/dockviz"
+if [ -f ~/.aliases ]; then
+	source ~/.aliases
+fi
