@@ -1,17 +1,26 @@
 #!/bin/bash
 
+# Requirements: mydumper (https://github.com/maxbube/mydumper)
+
+
+## SETTINGS
+# dump source
 export REMOTE_USER="root"
 export REMOTE_PASSWORD="root"
 export REMOTE_HOST="mysql.source.ru"
 
+# dump target
 export LOCAL_USER="root"
 export LOCAL_PASSWORD="root"
 export LOCAL_HOST="127.0.0.1"
 
+# mapping to be able to import to databases with different names. E.g. following this mapping `source_database_name_1` will be imported to `target_database_name_1`
 export REMOTE_DATABASES_MAP=(source_database_name_1 source_database_name_2)
 export LOCAL_DATAMASES_MAP=(target_database_name_1 target_database_name_2)
 
+# Data dump won't be created for these tables, but schema will be created anyway
 export EXCEPT_TABLES=(table_name_to_skip_data_dump_1 table_name_to_skip_dump_2)
+## END: SETTINGS
 
 
 ## EXPORT
@@ -25,13 +34,13 @@ done;
 ## END: EXPORT
 
 
-## Upload to local mysql?
-read -p "Upload to local mysql? " -r
+## QUESTION - Upload to target mysql?
+read -p "Upload to target database? " -r
 if [[ ! $REPLY =~ ^[Yy]$ ]]
 then
 	[[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
 fi
-## END: Upload to local mysql?
+## END: QUESTION - Upload to target mysql?
 
 
 ## IMPORT
@@ -42,3 +51,5 @@ for REMOTE_DATABASE in ${REMOTE_DATABASES_MAP[@]}; do
  myloader -d ${REMOTE_DATABASE}-export -o -t 4 -C -v 3 -B ${LOCAL_DATAMASES_MAP[$i]} -h ${LOCAL_HOST} -u ${LOCAL_USER} -p ${LOCAL_PASSWORD}
  ((i++));
 done;
+## END: IMPORT
+
