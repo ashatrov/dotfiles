@@ -20,6 +20,8 @@ export LOCAL_DATAMASES_MAP=(target_database_name_1 target_database_name_2)
 
 # Data dump won't be created for these tables, but schema will be created anyway
 export EXCEPT_TABLES=(table_name_to_skip_data_dump_1 table_name_to_skip_dump_2)
+
+export THREADS=4
 ## END: SETTINGS
 
 
@@ -28,8 +30,8 @@ for REMOTE_DATABASE in ${REMOTE_DATABASES_MAP[@]} ; do
 	echo -e "\n\n\n\n${REMOTE_DATABASE}\n\n"
 	EXCEPT_REGEXP=$(printf "|${REMOTE_DATABASE}.%s$" "${EXCEPT_TABLES[@]}")
 	EXCEPT_REGEXP="^(?!${EXCEPT_REGEXP:1})"
-	mydumper -m -v 3 -t 4 -s 500000 -C -e -o ${REMOTE_DATABASE}-export -h ${REMOTE_HOST} -u ${REMOTE_USER} -p ${REMOTE_PASSWORD} -P 3306 -B ${REMOTE_DATABASE} --regex ${EXCEPT_REGEXP}
-	mydumper -d -G -E -R -v 3 -t 4 -C -e -o ${REMOTE_DATABASE}-export -h ${REMOTE_HOST} -u ${REMOTE_USER} -p ${REMOTE_PASSWORD} -P 3306 -B ${REMOTE_DATABASE}
+	mydumper -m -v 3 -t ${THREADS} -s 500000 -C -e -o ${REMOTE_DATABASE}-export -h ${REMOTE_HOST} -u ${REMOTE_USER} -p ${REMOTE_PASSWORD} -P 3306 -B ${REMOTE_DATABASE} --regex ${EXCEPT_REGEXP}
+	mydumper -d -G -E -R -v 3 -t ${THREADS} -C -e -o ${REMOTE_DATABASE}-export -h ${REMOTE_HOST} -u ${REMOTE_USER} -p ${REMOTE_PASSWORD} -P 3306 -B ${REMOTE_DATABASE}
 done;
 ## END: EXPORT
 
@@ -46,10 +48,10 @@ fi
 ## IMPORT
 i=0
 for REMOTE_DATABASE in ${REMOTE_DATABASES_MAP[@]}; do
- echo -e "\n\n\n\nIMPORT: ${REMOTE_DATABASE} -> ${LOCAL_DATAMASES_MAP[$i]}\n\n";
- mysql -h ${LOCAL_HOST} -u ${LOCAL_USER} -p${LOCAL_PASSWORD} -e "DROP DATABASE IF EXISTS ${LOCAL_DATAMASES_MAP[$i]}; CREATE DATABASE ${LOCAL_DATAMASES_MAP[$i]} DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
- myloader -d ${REMOTE_DATABASE}-export -o -t 4 -C -v 3 -B ${LOCAL_DATAMASES_MAP[$i]} -h ${LOCAL_HOST} -u ${LOCAL_USER} -p ${LOCAL_PASSWORD}
- ((i++));
+	echo -e "\n\n\n\nIMPORT: ${REMOTE_DATABASE} -> ${LOCAL_DATAMASES_MAP[$i]}\n\n";
+	mysql -h ${LOCAL_HOST} -u ${LOCAL_USER} -p${LOCAL_PASSWORD} -e "DROP DATABASE IF EXISTS ${LOCAL_DATAMASES_MAP[$i]}; CREATE DATABASE ${LOCAL_DATAMASES_MAP[$i]} DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
+	myloader -d ${REMOTE_DATABASE}-export -o -t ${THREADS} -C -v 3 -B ${LOCAL_DATAMASES_MAP[$i]} -h ${LOCAL_HOST} -u ${LOCAL_USER} -p ${LOCAL_PASSWORD}
+	((i++));
 done;
 ## END: IMPORT
 
