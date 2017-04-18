@@ -101,3 +101,5 @@ if [ -f ~/.aliases ]; then
 fi
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+eval $(docker-machine env)
