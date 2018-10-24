@@ -40,7 +40,7 @@ CASE_SENSITIVE="true"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -60,8 +60,8 @@ CASE_SENSITIVE="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 #plugins=(git brew brew-cask composer docker docker-compose vim-interaction zsh-autosuggestions colorize colored-man-pages zsh-syntax-highlighting)
-plugins=(git brew brew-cask composer docker docker-compose vim-interaction colorize colored-man-pages)
-
+plugins=(git brew brew-cask composer docker docker-compose vim-interaction colorize colored-man-pages zsh-completions zsh-syntax-highlighting zsh-autosuggestions)
+autoload -U compinit && compinit
 # User configuration
 
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin:/usr/local/go/bin"

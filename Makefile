@@ -3,29 +3,40 @@ install:
 
 install-my:
 	ln -sf ${PWD}/utils.sh /usr/local/bin/my
+	@printf ${OK_MSG}
 
 install-zsh:
 	brew install z zsh zsh-completions
 	sh -c "$$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 	
-	rm -rf ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions ; git clone git://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-	rm -rf ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ; git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+	rm -rf $${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-completions
+	git clone https://github.com/zsh-users/zsh-completions $${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-completions
+	
+	rm -rf $${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+	git clone https://github.com/zsh-users/zsh-autosuggestions $${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+	
+	rm -rf $${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+	@printf ${OK_MSG}
 
 setup-zsh:
 	if [[ ! -f ~/.zshrc.default ]]; then \
 		cp -H ~/.zshrc ~/.zshrc.default && rm ~/.zshrc ;\
 	fi;
 	
-	ln -sf ${PWD}/ashatrov.zsh-theme ~/.oh-my-zsh/custom/
+	ln -sf ${PWD}/ashatrov.zsh-theme $${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
 	ln -sf ${PWD}/.zshrc ~/.zshrc
+	@printf ${OK_MSG}
 
 install-ansible:
 	sudo easy_install pip
 	pip install --upgrade setuptools --user python
 	sudo pip install ansible
+	@printf ${OK_MSG}
 
 install-vim:
 	brew install vim --with-override-system-vim
+	@printf ${OK_MSG}
 
 setup-vim:
 	mkdir -p ~/.vim/autoload ~/.vim/bundle
@@ -40,6 +51,7 @@ setup-vim:
 	fi;
 	
 	ln -sf ${PWD}/.vimrc ~/.vimrc
+	@printf ${OK_MSG}
 
 osx-settings:
 	./.osxdefaults
