@@ -102,4 +102,4 @@ fi
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-eval $(docker-machine env)
+#eval $(docker-machine env)
