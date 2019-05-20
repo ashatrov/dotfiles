@@ -99,7 +99,11 @@ alias ll='ls -lah'
 if [ -f ~/.aliases ]; then
 	source ~/.aliases
 fi
+if [ -f ~/.zshrc_local ]; then
+	source ~/.zshrc_local
+fi
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 #eval $(docker-machine env)
+
