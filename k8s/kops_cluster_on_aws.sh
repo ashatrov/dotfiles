@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x #echo on
 
 ### Install KOPS
 curl -Lo kops https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
@@ -14,6 +15,7 @@ sudo mv ./kubectl /usr/local/bin/kubectl
 
 ### Install awc-cli
 #pip install awscli
+sudo apt update
 sudo apt install awscli
 
 
@@ -88,11 +90,13 @@ kops create cluster \
     --zones=${CLUSTERZONES} \
     --discovery-store=s3://${KOPSBUCKET}-oidc-store/${NAME}/discovery
 
-kops update cluster --name ${NAME} --yes --admin=87600h
+kops update cluster --name ${NAME} --state=${KOPS_STATE_STORE} --yes --admin=87600h
 
-kops validate cluster --wait 10m
+kops validate cluster --state=${KOPS_STATE_STORE} --wait 10m
 
 kubectl get nodes
+
+kubectl get all
 
 kubectl -n kube-system get po
 
