@@ -1,6 +1,8 @@
 #!/bin/bash
 set -x #echo on
 
+echo '' > .export_vars.sh
+
 ### Install KOPS
 curl -Lo kops https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
 chmod +x ./kops
@@ -28,6 +30,7 @@ aws configure
 
 ### kOps IAM user
 read -e -p "Enter user group name (e.g. kops): " -i "kops" USERGROUPNAME
+echo "USERGROUPNAME=${USERGROUPNAME}" >> .export_vars.sh
 aws iam create-group --group-name ${USERGROUPNAME}
 
 aws iam attach-group-policy --policy-arn arn:aws:iam::aws:policy/AmazonEC2FullAccess --group-name ${USERGROUPNAME}
@@ -39,6 +42,7 @@ aws iam attach-group-policy --policy-arn arn:aws:iam::aws:policy/AmazonSQSFullAc
 aws iam attach-group-policy --policy-arn arn:aws:iam::aws:policy/AmazonEventBridgeFullAccess --group-name ${USERGROUPNAME}
 
 read -e -p "Enter user name (e.g. kops): " -i "kops" USERNAME
+echo "USERNAME=${USERNAME}" >> .export_vars.sh
 aws iam create-user --user-name ${USERNAME}
 
 aws iam add-user-to-group --user-name ${USERNAME} --group-name ${USERGROUPNAME}
@@ -51,13 +55,17 @@ echo "======= COFIGURE AWS WITH !!!!NEW!!!! USER ACCESS TOKEN ======"
 aws configure
 aws iam list-users
 export AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id)
+echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" >> .export_vars.sh
 export AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key)
+echo "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" >> .export_vars.sh
 
 export CURRENTREGION=$(aws configure get region)
+echo "CURRENTREGION=${CURRENTREGION}" >> .export_vars.sh
 
 
 # Create S3 buckets
 read -e -p "Enter bucket name (e.g. my-kops-test-bucket-r3i7h3d): " -i "my-kops-test-bucket-r3i7h3d" KOPSBUCKET
+echo "KOPSBUCKET=${KOPSBUCKET}" >> .export_vars.sh
 aws s3api create-bucket --bucket ${KOPSBUCKET} --create-bucket-configuration LocationConstraint=${CURRENTREGION}
 aws s3api put-bucket-versioning --bucket ${KOPSBUCKET}  --versioning-configuration Status=Enabled
 aws s3api create-bucket \
@@ -78,12 +86,16 @@ aws s3api put-bucket-encryption --bucket ${KOPSBUCKET} --server-side-encryption-
 # Create cluster
 read -e -p 'Enter kluster name (e.g. fleetman.k8s.local where .k8s.local part is !!!MANDATORY!!!): ' -i "fleetman.k8s.local" NAME
 export NAME=${NAME} ; echo $NAME
+echo "NAME=${NAME}" >> .export_vars.sh
 export KOPS_STATE_STORE=s3://${KOPSBUCKET} ; echo $KOPSBUCKET
+echo "KOPS_STATE_STORE=${KOPS_STATE_STORE}" >> .export_vars.sh
 
 
 aws ec2 describe-availability-zones
 export ALLAVAILABLEZONES=`aws ec2 describe-availability-zones --query 'AvailabilityZones[*].ZoneName' --output text | tr '\t' ','`
+echo "ALLAVAILABLEZONES=${ALLAVAILABLEZONES}" >> .export_vars.sh
 read -e -p "Enter availability zones in comma-separated format (e.g. ${ALLAVAILABLEZONES}): " -i ${ALLAVAILABLEZONES} CLUSTERZONES
+echo "CLUSTERZONES=${CLUSTERZONES}" >> .export_vars.sh
 kops create cluster \
     --name=${NAME} \
     --cloud=aws \
