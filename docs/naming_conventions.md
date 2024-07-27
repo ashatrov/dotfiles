@@ -18,6 +18,12 @@
       - Use `snake_case`.
       - Use the singular form of the related table name followed by `_id` (e.g., `user_id` for a reference to a `users` table).
 
+  1. Column Names for Flags (1|0):
+      - Use `snake_case`.
+      - Use prefix `is_`. Examples: `is_published`, `is_deleted`.
+
+        In some rare cases you can use `has_` prefix, but try to replace it with prefix `is_`, e.g. `has_role_admin` → `is_admin`, `has_photo` → `is_photo_uploaded`
+
 ## Indexes
 
   1. Indexes for One Column
